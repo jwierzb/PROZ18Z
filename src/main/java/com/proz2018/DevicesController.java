@@ -10,19 +10,27 @@ import java.util.List;
 @RestController
 public class DevicesController {
 
-    private final List<Devices> devices = new ArrayList<Devices>();
+    private final DevicesRepository repository;
 
-
-    @PostMapping("/devices")
-    public Devices device(@RequestParam(value = "name") String name, @RequestParam(value = "label") String label, @RequestParam(value = "enabled", defaultValue = "true") String enabled) {
-        Devices device = new Devices(label, name, enabled.equals("false") ? false : true, "asdf", new Date());
-        devices.add(device);
-        return device;
+    public DevicesController(DevicesRepository repository) {
+        this.repository = repository;
     }
 
+    // Aggregate
     @GetMapping("/devices")
     List<Devices> getAll(){
-        return devices;
+        return repository.findAll();
     }
-}
+    @PostMapping("/devices")
+    Devices newDevice(@RequestBody Devices newDevices) {
+        return repository.save(newDevices);
+    }
+    // Single item
+    @GetMapping("/devices/{id}/")
+    Devices  getOne(@PathVariable String id)
+    {
+        return repository.findById(id).orElseThrow(() -> new DevicesNotFoundException(id));
+    }
 
+
+}

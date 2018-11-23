@@ -2,10 +2,21 @@ package com.proz2018;
 
 import java.util.Date;
 
+import lombok.Data;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import static javax.persistence.GenerationType.SEQUENCE;
+
+@Data
+@Entity
 public class Devices {
     /** Mandatory */
     String deviceLabel;
-
+    @Id
+    @GeneratedValue(strategy=SEQUENCE, generator="CUST_SEQ")
+    String id;
     /** Default */
     String deviceName;
     Boolean enabled;
@@ -24,32 +35,6 @@ public class Devices {
         this.createdAtDate = createdAtDate;
     }
 
-    public String getDeviceLabel() {
-        return deviceLabel;
-    }
-
-
-    public String getDeviceName() {
-        return deviceName;
-    }
-
-
-
-    public Boolean getEnabled() {
-        return enabled;
-    }
-
-
-
-    public String getDescription() {
-        return description;
-    }
-
-
-
-    public Date getCreatedAtDate() {
-        return createdAtDate;
-    }
 
 
 }
