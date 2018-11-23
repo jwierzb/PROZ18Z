@@ -1,7 +1,10 @@
 package com.proz2018;
 
 
+
 import org.springframework.web.bind.annotation.*;
+import org.springframework.hateoas.Resource;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,13 +15,16 @@ public class DevicesController {
 
     private final DevicesRepository repository;
 
-    public DevicesController(DevicesRepository repository) {
+    private final DevicesResourcesAssembler assembler;
+
+    public DevicesController(DevicesRepository repository, DevicesResourcesAssembler assembler) {
         this.repository = repository;
+        this.assembler = assembler;
     }
 
     // Aggregate
     @GetMapping("/devices")
-    List<Devices> getAll(){
+    List<Devices> all(){
         return repository.findAll();
     }
     @PostMapping("/devices")
@@ -27,9 +33,10 @@ public class DevicesController {
     }
     // Single item
     @GetMapping("/devices/{id}/")
-    Devices  getOne(@PathVariable String id)
+    Resource<Devices>  one(@PathVariable String id)
     {
-        return repository.findById(id).orElseThrow(() -> new DevicesNotFoundException(id));
+        Devices  device = repository.findById(id).orElseThrow(() -> new DevicesNotFoundException(id));
+        return assembler.toResource(device);
     }
 
 
