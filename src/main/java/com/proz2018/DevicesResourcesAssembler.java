@@ -2,18 +2,21 @@ package com.proz2018;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
-        import org.springframework.hateoas.Resource;
-        import org.springframework.hateoas.ResourceAssembler;
-        import org.springframework.stereotype.Component;
+import com.proz2018.controller.DevicesController;
+import com.proz2018.entities.Device;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.ResourceAssembler;
+import org.springframework.stereotype.Component;
+
 
 @Component
-class DevicesResourcesAssembler implements ResourceAssembler<Devices, Resource<Devices>> {
+public class DevicesResourcesAssembler implements ResourceAssembler<Device, Resource<Device>> {
 
     @Override
-    public Resource<Devices> toResource(Devices device) {
+    public Resource<Device> toResource(Device device) {
 
         return new Resource<>(device,
                 linkTo(methodOn(DevicesController.class).one(device.getId())).withSelfRel(),
-                linkTo(methodOn(DevicesController.class).all()).withRel("employees"));
+                linkTo(methodOn(DevicesController.class).all()).withRel("devices"));
     }
 }
