@@ -4,6 +4,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
 import com.proz2018.controller.DevicesController;
 import com.proz2018.entities.Device;
+import com.proz2018.entities.User;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceAssembler;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class DevicesResourcesAssembler implements ResourceAssembler<Device, Reso
     public Resource<Device> toResource(Device device) {
 
         return new Resource<>(device,
-                linkTo(methodOn(DevicesController.class).one(device.getId())).withSelfRel(),
-                linkTo(methodOn(DevicesController.class).all()).withRel("devices"));
+                linkTo(methodOn(DevicesController.class).one(device.getUser(), device.getId())).withRel("url"),
+                linkTo(methodOn(DevicesController.class).all(device.getUser())).withRel("devices"));
     }
 }
