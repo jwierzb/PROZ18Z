@@ -9,7 +9,10 @@ import com.proz2018.dao.DeviceDao;
 import com.proz2018.dao.UserDao;
 import com.proz2018.entities.Device;
 import com.proz2018.entities.User;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.Resource;
@@ -45,17 +48,16 @@ public class DevicesController {
 
     // Aggregate
     @GetMapping
-    public Resources<Resource<Device>>  all(@AuthenticationPrincipal final User user,
+    public Page<Device>  all(@AuthenticationPrincipal final User user,
                                             @RequestParam(name="ordering", defaultValue = "created_at") String ordering,
-                                            @RequestParam(name="pagesize", defaultValue = "1") Integer pageSize,
-                                            @RequestParam(name="page") Integer page){
-        //TODO exception handling, wraping resource<device> pageable
-        List <Device> devices = repository.findAllByUserIdOrderByDeviceNameAsc(user.getId(), PageRequest.of(page, pageSize, new Sort(Sort.Direction.DESC,ordering)));
+                                            @RequestParam(name="pagesize", defaultValue = "1000000") Integer pageSize,
+                                            @RequestParam(name="page", defaultValue = "0") Integer page){
+        //TODO exception handling, wraping resource<device> pageable, sorting
+        Page<Device> devices = repository.findAllByUser(user, new PageRequest(page, pageSize));
+        //List <Device> devices = repository.findAllByUserId(user.getId());
         devices.forEach(device -> device.setNumber_of_variables(varsRepository.findByUserIdAndDeviceId(user.getId(), device.getId()).size()));
-        List<Resource<Device>> device = devices.stream()
-                .map(assembler::toResource)
-                .collect(Collectors.toList());
-        return new Resources<>(device);
+        //devices.forEach(assembler::toResource);
+        return devices;
     }
 
     // Single item
@@ -69,6 +71,7 @@ public class DevicesController {
 
     // Single item
     @GetMapping("/{id}/variables")
+    //TODO return Resourcese<List<>> except List
     public List<Variable> variables(@AuthenticationPrincipal final User user, @PathVariable Integer id)
     {
         List<Variable> vars = varsRepository.findByUserIdAndDeviceId(user.getId(), id);
