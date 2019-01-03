@@ -18,10 +18,11 @@ public interface UserDao extends JpaRepository<User, Integer> {
     Optional<User> findByUserName(String userName);
     @Transactional
     void deleteByUserName(String userName);
+
     @Modifying
     @Query(value = "insert into user (user_name, user_password, user_email, last_login) VALUES (:userName,:userPassword, :userEmail, :lastLogin)", nativeQuery = true)
     @Transactional
-    void save(@Param("userName") String userName, @Param("userPassword") String userPassword,
+    void saveAndFlush(@Param("userName") String userName, @Param("userPassword") String userPassword,
               @Param("userEmail") String userEmail, @Param("lastLogin") LocalDateTime lastLogin);
 
 

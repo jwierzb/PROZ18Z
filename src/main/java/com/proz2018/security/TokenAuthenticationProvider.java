@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static lombok.AccessLevel.PACKAGE;
+import static lombok.AccessLevel.PUBLIC;
 import static lombok.AccessLevel.PRIVATE;
 
 @Component
-@AllArgsConstructor(access = PACKAGE)
+@AllArgsConstructor(access = PUBLIC)
 @FieldDefaults(level = PRIVATE, makeFinal = true)
-final class TokenAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+public class TokenAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
     @NonNull
     UserAuthenticationService auth;
 

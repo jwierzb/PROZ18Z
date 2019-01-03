@@ -11,11 +11,10 @@ import java.time.LocalDateTime;
 public class Variable {
 
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "variable_id")
-    private Integer variableId;
+    private Integer id;
 
     @Column(name="variable_name")
     private String deviceName;

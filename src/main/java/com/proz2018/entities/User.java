@@ -1,7 +1,10 @@
 package com.proz2018.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,8 +40,9 @@ public class User implements UserDetails {
     @Column(name = "enabled")
     private Boolean enabled;
 
-    @Column(name = "email")
+    @Column(name = "user_email")
     @Email
+    @NonNull
     private String email;
 
     @Override
@@ -82,6 +86,6 @@ public class User implements UserDetails {
         return true;
     }
 
-
+    User(){}
 
 }

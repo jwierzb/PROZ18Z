@@ -1,17 +1,18 @@
 
 PRAGMA foreign_keys = ON;
-DROP TABLE user;
 DROP TABLE device;
 DROP TABLE value;
 DROP TABLE variable;
 
 PRAGMA foreign_keys = ON;
 
+DROP TABLE user;
 CREATE TABLE "user" (
   "user_id" INTEGER PRIMARY KEY AUTOINCREMENT ,
   "user_name" VARCHAR(30) NOT NULL,
   "user_password" VARCHAR(30) NOT NULL,
-  "last_login" DATETIME DEFAULT NULL
+  "last_login" TIMESTAMP DEFAULT (strftime('%s', datetime('now', 'localtime'))),
+  "user_email" VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE "device" (

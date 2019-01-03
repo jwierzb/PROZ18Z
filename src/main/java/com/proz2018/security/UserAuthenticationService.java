@@ -11,7 +11,9 @@ public interface UserAuthenticationService {
      *
      * @param username
      * @param password
-     * @return an {@link Optional} of a user when login succeeds
+     * @ret
+
+2018-12-07 16:39:03.329  INFO 10883 --- [       Thread-2] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'urn an {@link Optional} of a user when login succeeds
      */
     Optional<String> login(String username, String password);
     /**
