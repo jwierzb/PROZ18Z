@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Component
 public class ScheduledTasks {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
@@ -22,7 +21,7 @@ public class ScheduledTasks {
         log.info("The time is now {}", dateFormat.format(new Date()));
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 5000)
     public void pushRandomNumber()
     {
         Random random = new Random();

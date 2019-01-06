@@ -6,6 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,39 +21,14 @@ public class Application {
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         SpringApplication.run(Application.class);
+        ApplicationContext factory = new AnnotationConfigApplicationContext(SpamWithNumbersConfig.class);
+        //CommandLineRunner com = factory.getBean(CommandLineRunner.class); // what happens?
     }
 
-    @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder)
-    {
-        return builder.build();
-    }
 
-    @Bean
-    public CommandLineRunner run(RestTemplate restTemplate) throws Exception
-    {
-        return args -> {
-            Quote quote = restTemplate.getForObject(
-                    "http://gturnquist-quoters.cfapps.io/api/random", Quote.class);
-            log.info(quote.toString());
-        };
-    }
 
-    @Bean
-    public CommandLineRunner register(RestTemplate restTemplate) throws Exception
-    {
 
-        return args -> {
-            log.info("My bean!");
-            /*HttpEntity<RegisterParams> request = new HttpEntity<>(new RegisterParams("a", "b", "c"));
-            AuthorizationToken token = restTemplate.postForObject(
-                    "http://localhost:8081/api/users/register",
-                    request,
-                    AuthorizationToken.class );
-            log.info(token.toString());*/
-            //AuthorizationToken token = restTemplate.postForObject("http://localhost:8081?password=c&email=f&username=d", AuthorizationToken.class);
-        };
-    }
 }

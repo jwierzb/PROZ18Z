@@ -10,6 +10,6 @@ public class AuthorizationToken
     @Override
     public String toString()
     {
-        return "{ \"Authorization:\": \"Bearer" + token + "\"}";
+        return "{ \"Authorization\": \"Bearer " + token + "\"}";
     }
 }
