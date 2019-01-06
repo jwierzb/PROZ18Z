@@ -58,7 +58,7 @@ public class SpamWithNumbersConfig
         //http://localhost:8081/api/users/login?username=q&password=w
         // still does not work, I cannot pass the parameters
         String  token = restTemplate.postForObject(
-                "http://localhost:8081/api/users/login",
+                "http://localhost:8081/api/users/login?username=q&password=w",
                 request,
                 String.class );
         log.info(token.toString());
