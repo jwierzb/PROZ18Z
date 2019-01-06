@@ -19,13 +19,5 @@ public interface DeviceDao extends JpaRepository<Device, Integer> {
     Optional<Device> findByUserAndId(UserEntity user, Integer id);
     Page<Device> findByUser(UserEntity user, Pageable pageable);
 
-    @Modifying
-    @Transactional
-    @Query(value = "update device set device_name = :name, description = :description, tags = :tags, enabled = :enabled where device_id = :id and user_id = :userId", nativeQuery = true)
-    void update(@Param("userId") Integer userId,
-                      @Param("id") Integer id,
-                      @Param("description") String description,
-                      @Param("tags") String tags,
-                      @Param("enabled") Boolean enabled,
-                      @Param("name") String name);
+
 }

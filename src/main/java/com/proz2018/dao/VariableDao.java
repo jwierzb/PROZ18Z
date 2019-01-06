@@ -22,13 +22,4 @@ public interface VariableDao extends JpaRepository<Variable, Integer> {
 
 
 
-    @Modifying
-    @Transactional
-    @Query(value = "update variable set variable_name = :name, description = :description, tags = :tags, enabled = :enabled, unit = :unit where variable_id = :id", nativeQuery = true)
-    void update(@Param("id") Integer id,
-                @Param("description") String description,
-                @Param("unit") String unit,
-                @Param("tags") String tags,
-                @Param("enabled") Boolean enabled,
-                @Param("name") String name);
 }
