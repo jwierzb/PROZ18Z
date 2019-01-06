@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface VariableDao extends JpaRepository<Variable, Integer> {
     List<Variable> findByUserId(Integer id);
     List<Variable> findByUserIdAndDeviceId(Integer userId, Integer id);
+    void deleteAllByDeviceId(Integer id);
 }

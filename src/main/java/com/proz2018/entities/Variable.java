@@ -1,6 +1,9 @@
 package com.proz2018.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,13 +26,17 @@ public class Variable {
     private String tags;
     private String description;
 
-    // Foreign key
-    @Column(name = "user_id")
-    private Integer userId;
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private UserEntity user;
 
-    // Foreign key
-    @Column(name = "device_id")
-    private Integer deviceId;
+    @JoinColumn(name = "device_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Device device;
 
     @GeneratedValue
     @Column(name = "created_at")
@@ -39,10 +46,10 @@ public class Variable {
     @Column(name = "last_activity")
     private LocalDateTime lastActivity;
 
-    public Variable(String deviceName, String description, Integer userId) {
+    public Variable(String deviceName, String description, UserEntity user) {
         this.deviceName = deviceName;
         this.description = description;
-        this.userId=userId;
+        this.user=user;
 
     }
     public Variable(){}
