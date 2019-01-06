@@ -1,6 +1,7 @@
 package pack;
 
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -50,16 +53,27 @@ public class SpamWithNumbersConfig
         log.info("My bean!");
         RegisterParams request = new RegisterParams("x", "y", "z");
         log.info(request.toString());
-        //password=dwa&email=trzy&username=jeden
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        JSONObject json = new JSONObject();
+        json.put("username", "q");
+        json.put("password", "w");
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(json.toString(), headers);
+
+        //http://localhost:8081/api/users/login?username=q&password=w
         // still does not work, I cannot pass the parameters
-        AuthorizationToken token = restTemplate.postForObject(
-                "http://localhost:8081/api/users/login?username=q&password=w",
-                request,
-                AuthorizationToken.class );
+        String  token = restTemplate.postForObject(
+                "http://localhost:8081/api/users/login",
+                httpEntity,
+                String.class );
         log.info(token.toString());
         /*String user = restTemplate.getForObject("http://localhost:8081/api/users/current", String.class);
         log.info(user);*/
         //AuthorizationToken token = restTemplate.postForObject("http://localhost:8081?password=c&email=f&username=d", AuthorizationToken.class);
-        return token;
+        AuthorizationToken x = new AuthorizationToken();
+        return x;
     }
 }
