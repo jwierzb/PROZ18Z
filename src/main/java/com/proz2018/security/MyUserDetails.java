@@ -23,13 +23,13 @@ public class MyUserDetails implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 
-        final UserEntity user = userRepository.findByUsername(username);
+        UserEntity user = userRepository.findByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("UserEntity '" + username + "' not found");
         }
 
-        return org.springframework.security.core.userdetails.User.withDefaultPasswordEncoder()//
+        return  org.springframework.security.core.userdetails.User.withDefaultPasswordEncoder()//
                 .username(username)//
                 .password(user.getPassword())//
                 .authorities(Collections.emptyList())//

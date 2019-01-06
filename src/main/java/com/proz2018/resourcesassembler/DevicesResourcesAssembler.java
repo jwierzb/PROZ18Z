@@ -21,13 +21,11 @@ public class DevicesResourcesAssembler implements ResourceAssembler<Device, Reso
     public Resource<Device> toResource(Device device) {
 
         try {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            UserEntity userEntity = ((UserEntity) principal);
 
             Resource<Device> rs= new Resource<Device>(
                     device,
                     linkTo(methodOn(DevicesController.class).one(device.getId())).withRel("url"),
-                    linkTo(methodOn(DevicesController.class).variables(device.getId())).withRel("variables")
+                    linkTo(methodOn(DevicesController.class).deviceVariables(device.getId())).withRel("variables")
             );
             return rs;
         } catch (ClassCastException ex){

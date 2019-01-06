@@ -16,9 +16,7 @@ import java.util.Optional;
 
 @Repository
 public interface DeviceDao extends JpaRepository<Device, Integer> {
-    List<Device> findByUserId(Integer id);
-    Optional<Device> findByUserIdAndId(Integer userId, Integer id);
-    List<Device> findAllByUserId(Integer userId);
+    Optional<Device> findByUserAndId(UserEntity user, Integer id);
     Page<Device> findByUser(UserEntity user, Pageable pageable);
 
     @Modifying
