@@ -51,27 +51,18 @@ public class SpamWithNumbersConfig
     public AuthorizationToken login(RestTemplate restTemplate) throws Exception
     {
         log.info("My bean!");
-        RegisterParams request = new RegisterParams("x", "y", "z");
+        LoginParams request = new LoginParams("q", "w");
         log.info(request.toString());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-
-        JSONObject json = new JSONObject();
-        json.put("username", "q");
-        json.put("password", "w");
-
-        HttpEntity<String> httpEntity = new HttpEntity<>(json.toString(), headers);
 
         //http://localhost:8081/api/users/login?username=q&password=w
         // still does not work, I cannot pass the parameters
         String  token = restTemplate.postForObject(
                 "http://localhost:8081/api/users/login",
-                httpEntity,
+                request,
                 String.class );
         log.info(token.toString());
-        /*String user = restTemplate.getForObject("http://localhost:8081/api/users/current", String.class);
-        log.info(user);*/
+
         //AuthorizationToken token = restTemplate.postForObject("http://localhost:8081?password=c&email=f&username=d", AuthorizationToken.class);
         AuthorizationToken x = new AuthorizationToken();
         return x;
