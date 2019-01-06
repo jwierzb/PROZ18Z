@@ -17,7 +17,9 @@ import java.util.Collection;
 @Entity
 @Data
 @Table(name = "user")
-public class User implements UserDetails {
+@Builder
+@AllArgsConstructor
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +27,12 @@ public class User implements UserDetails {
     private Integer id;
 
     @Column(name = "user_name")
-    private String userName;
+    private String username;
 
 
     @Column(name = "user_password")
     @JsonIgnore
-    private String userPassword;
+    private String password;
 
 
     @Column(name = "last_login")
@@ -38,6 +40,7 @@ public class User implements UserDetails {
     private Timestamp lastLogin;
 
     @Column(name = "enabled")
+    @JsonIgnore
     private Boolean enabled;
 
     @Column(name = "user_email")
@@ -54,12 +57,12 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public String getPassword() {
-        return userPassword;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
@@ -86,6 +89,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    User(){}
+    public UserEntity(){}
 
 }

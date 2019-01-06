@@ -38,7 +38,7 @@ public class Device {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User user;
+    private UserEntity user;
 
 
     @Column(name = "created_at")

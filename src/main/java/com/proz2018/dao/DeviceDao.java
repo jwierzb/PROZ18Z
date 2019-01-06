@@ -1,13 +1,9 @@
 package com.proz2018.dao;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.proz2018.entities.Device;
-import com.proz2018.entities.User;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
+import com.proz2018.entities.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Cacheable;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +19,7 @@ public interface DeviceDao extends JpaRepository<Device, Integer> {
     List<Device> findByUserId(Integer id);
     Optional<Device> findByUserIdAndId(Integer userId, Integer id);
     List<Device> findAllByUserId(Integer userId);
-    Page<Device> findByUser(User user, Pageable pageable);
+    Page<Device> findByUser(UserEntity user, Pageable pageable);
 
     @Modifying
     @Transactional

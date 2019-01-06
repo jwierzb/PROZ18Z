@@ -1,51 +1,62 @@
 package com.proz2018.controller;
 
 import com.proz2018.dao.UserDao;
-import com.proz2018.entities.User;
-import com.proz2018.exception.InvalidPasswordException;
+import com.proz2018.entities.UserEntity;
+import com.proz2018.exception.CustomException;
+import com.proz2018.model.UserModel;
+import com.proz2018.model.UserModelLogin;
+import com.proz2018.security.JwtTokenProvider;
 import com.proz2018.security.TokenWraper;
-import com.proz2018.security.UserAuthenticationService;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.experimental.FieldDefaults;
-import org.springframework.hateoas.Resource;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
-import static lombok.AccessLevel.PACKAGE;
-import static lombok.AccessLevel.PRIVATE;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
 @Data
 final class PublicUsersController {
-    @NonNull
-    private UserAuthenticationService authentication;
-    @NonNull
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
+    @Autowired
     private UserDao users;
 
-    @PostMapping("/register")
-    private Resource<TokenWraper> register(
-            @RequestParam("username") final String username,
-            @RequestParam("password") final String password,
-            @RequestParam("email") final String email) {
-        users.saveAndFlush(username, password, email, LocalDateTime.now());
-        return login(username, password);
+    @PostMapping("/new")
+    @ResponseStatus(HttpStatus.CREATED)
+    private void register(@RequestBody UserModel userModel) throws Exception {
+        if(users.existsByUsername(userModel.getUsername()) || users.existsByEmail(userModel.getEmail())) throw new Exception(); //TODO better exception
+        UserEntity userEntity =
+                UserEntity.builder()
+                        .username(userModel.getUsername())
+                        .password((userModel.getPassword()))
+                        .enabled(true)
+                        .email(userModel.getEmail())
+                        .build();
+        users.save(userEntity);
     }
 
     @PostMapping("/login")
-    private Resource<TokenWraper> login(
-            @RequestParam("username") final String username,
-            @RequestParam("password") final String password) {
-        return new Resource <TokenWraper> (new TokenWraper(
-            authentication
-                .login(username, password)
-                .orElseThrow(() -> new InvalidPasswordException(username))));
+    @ResponseStatus(HttpStatus.OK)
+    private TokenWraper login(@RequestBody UserModelLogin userModel)  {
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userModel.getUsername(), userModel.getPassword()));
+            return new TokenWraper(jwtTokenProvider.createToken(userModel.getUsername()));
+        } catch (AuthenticationException e) {
+            throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 
 
