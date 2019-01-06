@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,7 @@ final class SecuredUsersController {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return new Resource<UserEntity> (userDao.findByUsername(((UserEntity) principal).getUsername()));
+        return new Resource<UserEntity> (userDao.findByUsername(((UserDetails) principal).getUsername()));
     }
 
 }
