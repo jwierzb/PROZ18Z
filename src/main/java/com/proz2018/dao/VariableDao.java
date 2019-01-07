@@ -3,6 +3,8 @@ package com.proz2018.dao;
 import com.proz2018.entities.Device;
 import com.proz2018.entities.UserEntity;
 import com.proz2018.entities.Variable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +19,7 @@ import java.util.Optional;
 public interface VariableDao extends JpaRepository<Variable, Integer> {
 
     Optional<Variable> findByIdAndUser(Integer id, UserEntity user);
-    List<Variable> findAllByUser(UserEntity user);
+    Page<Variable> findAllByUser(UserEntity user, Pageable pageable);
     List<Variable> findAllByUserAndDevice(UserEntity user, Device device);
 
 

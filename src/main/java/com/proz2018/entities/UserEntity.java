@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,7 +38,6 @@ public class UserEntity implements UserDetails {
 
 
     @Column(name = "last_login")
-    @CreationTimestamp
     private Timestamp lastLogin;
 
     @Column(name = "enabled")

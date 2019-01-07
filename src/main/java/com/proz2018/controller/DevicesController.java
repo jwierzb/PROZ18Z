@@ -47,10 +47,9 @@ public class DevicesController {
 
     // Aggregate
     @GetMapping(produces = "application/json")
-    public List<Resource<Device>>  all(
-                                            @RequestParam(name="ordering", defaultValue = "createdAtDate") String ordering,
-                                            @RequestParam(name="pagesize", defaultValue = "1000000") Integer pageSize,
-                                            @RequestParam(name="page", defaultValue = "0") Integer page){
+    public List<Resource<Device>>  all(@RequestParam(name="ordering", defaultValue = "createdAtDate") String ordering,
+                                       @RequestParam(name="pagesize", defaultValue = "1000000") Integer pageSize,
+                                       @RequestParam(name="page", defaultValue = "0") Integer page){
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userRepository.findByUsername(((UserDetails) principal).getUsername());

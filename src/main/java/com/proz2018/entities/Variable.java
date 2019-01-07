@@ -39,7 +39,7 @@ public class Variable {
     private String unit;
 
     @Column(name = "last_value")
-    private Float lastValue;
+    private Double lastValue;
 
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

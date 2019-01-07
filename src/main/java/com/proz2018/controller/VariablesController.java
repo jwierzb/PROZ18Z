@@ -41,12 +41,14 @@ public class VariablesController {
     DeviceDao deviceDao;
 
     @GetMapping
-    List<Variable> allVariables(){
+    Page<Variable> allVariables(@RequestParam(name="ordering", defaultValue = "id") String ordering,
+                                @RequestParam(name="pagesize", defaultValue = "20") Integer pageSize,
+                                @RequestParam(name="page", defaultValue = "0") Integer page){
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userDao.findByUsername(((UserDetails) principal).getUsername());
 
-        return variableDao.findAllByUser(user);
+        return variableDao.findAllByUser(user, new PageRequest(page, pageSize, Sort.Direction.DESC, ordering));
     }
 
     @GetMapping("/{id}")
@@ -80,6 +82,7 @@ public class VariablesController {
 
         return variableDao.save(variable);
     }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteVariable(@PathVariable Integer id){
@@ -96,6 +99,8 @@ public class VariablesController {
         variableDao.delete(variable);
 
     }
+
+
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Value createValue(@PathVariable Integer id, @RequestParam(name = "value") Double value){
@@ -107,6 +112,8 @@ public class VariablesController {
         Value val = new Value();
         val.setValue(value);
         val.setVariable(variable);
+        variable.setLastValue(value);
+        variableDao.save(variable);
         return valueDao.save(val);
     }
 
@@ -127,9 +134,9 @@ public class VariablesController {
 
     @DeleteMapping("/{id}/values")
     @ResponseStatus(HttpStatus.OK)
-    public void getAllValues(@PathVariable Integer id,
-                                           @RequestParam(name="start") String start,
-                                           @RequestParam(name="end") String end){
+    public void deleteAllValues(@PathVariable Integer id,
+                                @RequestParam(name="start") String start,
+                                @RequestParam(name="end") String end){
 
 
             Timestamp startTime = Timestamp.valueOf(LocalDateTime.parse(start));

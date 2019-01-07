@@ -15,8 +15,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @RestController
 @RequestMapping("/api/users")
@@ -31,12 +32,12 @@ final class PublicUsersController {
 
 
     @Autowired
-    private UserDao users;
+    private UserDao userDao;
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     private void register(@RequestBody UserModel userModel) throws Exception {
-        if(users.existsByUsername(userModel.getUsername()) || users.existsByEmail(userModel.getEmail())) throw new Exception(); //TODO better exception
+        if(userDao.existsByUsername(userModel.getUsername()) || userDao.existsByEmail(userModel.getEmail())) throw new Exception(); //TODO better exception
         UserEntity userEntity =
                 UserEntity.builder()
                         .username(userModel.getUsername())
@@ -44,7 +45,7 @@ final class PublicUsersController {
                         .enabled(true)
                         .email(userModel.getEmail())
                         .build();
-        users.save(userEntity);
+        userDao.save(userEntity);
     }
 
     @PostMapping("/login")
@@ -53,6 +54,13 @@ final class PublicUsersController {
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userModel.getUsername(), userModel.getPassword()));
+
+
+            //update user last login field
+            UserEntity user = userDao.findByUsername(userModel.getUsername());
+            user.setLastLogin(Timestamp.valueOf(LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime()));
+            userDao.save(user);
+
             return new TokenWraper(jwtTokenProvider.createToken(userModel.getUsername()));
         } catch (AuthenticationException e) {
             throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
