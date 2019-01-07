@@ -18,6 +18,11 @@
         <table>
             <form action="register" method="get">
                 <tr>
+                    <td><input type="submit" value="Register"></td>
+                </tr>
+            </form>
+            <form action="login" method="get">
+                <tr>
                     <td><input type="submit" value="Login"></td>
                 </tr>
             </form>

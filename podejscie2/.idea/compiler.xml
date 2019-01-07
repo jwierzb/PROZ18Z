@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="podejscie2" />
+        <module name="spring-boot-web-application-example" />
       </profile>
     </annotationProcessing>
   </component>

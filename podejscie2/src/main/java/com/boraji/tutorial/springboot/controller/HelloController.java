@@ -1,6 +1,7 @@
 package com.boraji.tutorial.springboot.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import model.UserModelLogin;
 import model.UserModelRegister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,15 +58,25 @@ public class HelloController
         RestTemplate restTemplate = new RestTemplate();
 
         String response = restTemplate.postForObject("http://localhost:8081/api/users/register", body, String.class );
-        
+
         model.addAttribute("name", response);
         return "hello";
     }
 
+    @GetMapping("/login")
+    public String loginScreen() { return "login_screen"; }
+
     @PostMapping("/login")
     public String logInRequest( @RequestParam("name") String name, @RequestParam("password") String password, Model model )
     {
-        HttpURLConnection con;
+        log.info("Login request with params: " + name + " " + password );
+        UserModelLogin body = new UserModelLogin(name, password);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        String response = restTemplate.postForObject("http://localhost:8081/api/users/login", body, String.class );
+
+        /*HttpURLConnection con;
         StringBuffer content = new StringBuffer(); // do tego zczyta dane
         {
             try {
@@ -104,7 +115,7 @@ public class HelloController
             {
                 e.printStackTrace();
             }
-        }
+        }*/
         model.addAttribute("name", name);
         return "hello";
     }
