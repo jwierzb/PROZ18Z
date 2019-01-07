@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -51,20 +53,36 @@ public class SpamWithNumbersConfig
     public AuthorizationToken login(RestTemplate restTemplate) throws Exception
     {
         log.info("My bean!");
-        LoginParams request = new LoginParams("q", "w");
+        UserModelLogin request = new UserModelLogin();
+        request.setUsername("q");
+        request.setPassword("w");
         log.info(request.toString());
-
-
         //http://localhost:8081/api/users/login?username=q&password=w
-        // still does not work, I cannot pass the parameters
-        String  token = restTemplate.postForObject(
-                "http://localhost:8081/api/users/login?username=q&password=w",
+        AuthorizationToken  token = restTemplate.postForObject(
+                "http://localhost:8081/api/users/login",
                 request,
-                String.class );
+                AuthorizationToken.class );
         log.info(token.toString());
 
         //AuthorizationToken token = restTemplate.postForObject("http://localhost:8081?password=c&email=f&username=d", AuthorizationToken.class);
-        AuthorizationToken x = new AuthorizationToken();
-        return x;
+        return token;
+    }
+
+    @Bean
+    public HttpHeaders getProperHeader( AuthorizationToken token)
+    {
+        HttpHeaders result = new HttpHeaders();
+        result.set( "Authorization", "Bearer " + token.getToken());
+        log.info("SET "+ token.toString());
+        return result;
+    }
+
+    @Bean
+    public String attempt(HttpHeaders headers, RestTemplate restTemplate)
+    {
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+        ResponseEntity<String>  result = restTemplate.exchange("http://localhost:8081/api/users/current", HttpMethod.GET, entity, String.class );
+        log.info("Entity: " + result.toString());
+        return result.getBody();
     }
 }
