@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,18 +17,28 @@
 
 <div class="form">
         <table>
-            <form action="register" method="get">
+            <form action="/register" method="get">
                 <tr>
                     <td><input type="submit" value="Register"></td>
                 </tr>
             </form>
-            <form action="login" method="get">
+            <form action="/login" method="get">
                 <tr>
                     <td><input type="submit" value="Login"></td>
                 </tr>
             </form>
         </table>
 </div>
+
+<c:forEach var = "i" begin = "1" end = "5">
+    Item <c:out value = "${i}"/><p>
+
+</c:forEach>
+
+    <c:forTokens var = "name" items= "Ala,Ma,Kota" delims=",">
+    Item <c:out value = "${name}"/><p>
+
+    </c:forTokens>
 
 </body>
 </html>
