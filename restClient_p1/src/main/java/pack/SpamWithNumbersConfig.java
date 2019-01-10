@@ -1,10 +1,10 @@
 package pack;
 
 
-import org.json.JSONObject;
+import model.AuthorizationToken;
+import model.UserModelLogin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 public class SpamWithNumbersConfig
 {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
-    //private static final RestTemplateBuilder buider = new RestTemplateBuilder();
 
     @Bean RestTemplateBuilder builder()
     {
@@ -54,8 +53,8 @@ public class SpamWithNumbersConfig
     {
         log.info("My bean!");
         UserModelLogin request = new UserModelLogin();
-        request.setUsername("q");
-        request.setPassword("w");
+        request.setUsername("test");
+        request.setPassword("test");
         log.info(request.toString());
         //http://localhost:8081/api/users/login?username=q&password=w
         AuthorizationToken  token = restTemplate.postForObject(

@@ -1,10 +1,7 @@
 package com.boraji.tutorial.springboot.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import model.AuthorizationToken;
-import model.DeviceModel;
-import model.UserModelLogin;
-import model.UserModelRegister;
+import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -16,14 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
-import java.lang.reflect.Type;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @Slf4j
@@ -95,12 +90,18 @@ public class MainController {
     @GetMapping("/devices")
     public String showDevices(Model model) {
         HttpEntity<String> entity = new HttpEntity<>("parameters", authorizationHeaders);
-        List<DeviceModel> list = new ArrayList<>();
-        ResponseEntity<List<DeviceModel>> response = restTemplate.exchange(
+        ResponseEntity<List<DeviceBigModel>> response = restTemplate.exchange(
                 "http://localhost:8081/api/devices",
                 HttpMethod.GET,
-                entity, new ParameterizedTypeReference<List<DeviceModel>>() {});
-        model.addAttribute("name", response.getBody().toString());
+                entity, new ParameterizedTypeReference<List<DeviceBigModel>>() {});
+        ResponseEntity<String> testResponse = restTemplate.exchange(
+                "http://localhost:8081/api/devices",
+                HttpMethod.GET,
+                entity, String.class);
+
+        model.addAttribute("name", testResponse.getBody());
+        model.addAttribute("second_name", response.getBody().toString());
+        model.addAttribute("devices", response.getBody());
         return "devices";
     }
 

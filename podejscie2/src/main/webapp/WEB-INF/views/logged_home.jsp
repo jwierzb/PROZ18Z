@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
     <!-- Static content -->
-    <link rel="stylesheet" href="/resources/css/style.css">
+    <link rel="stylesheet" href="/resources/static/css/style.css">
     <script type="text/javascript" src="/resources/js/app.js"></script>
 
     <title>MAIN MENU</title>
