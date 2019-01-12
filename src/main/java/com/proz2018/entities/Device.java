@@ -60,7 +60,7 @@ public class Device {
     @JsonIgnore
     private Timestamp lastActivity;
 
-    @Column(name = "variables_count", nullable = true)
+    @Column(name = "variables_count", nullable = false)
     private Integer variablesCount;
 
 
@@ -78,6 +78,7 @@ public class Device {
         this.enabled = enabled;
         this.description = description;
         this.tags = tags;
+        this.variablesCount = 0;
     }
     public Device(){}
 
