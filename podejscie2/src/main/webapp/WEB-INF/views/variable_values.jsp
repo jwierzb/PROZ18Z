@@ -21,18 +21,16 @@
     <tr>
         <td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
     </tr>
-<c:forEach items="${devices}" var="device">
-    <tr>
-        <td><c:out value="${device.deviceName} "></c:out></td>
-        <td><c:out value="${device.description} "></c:out></td>
-        <td><c:out value="${device.lastActivity.toLocaleString()} "></c:out></td>
-        <td><c:out value="${device.createdAtDate.toLocaleString()} "></c:out></td>
-        <td><a href="/devices/${device.id}">back home</a> </td>
-        <td><a href="/devices/${device.id}/variables">back home</a> </td>
-        <form action="/hello"><td><input type="submit" value="See yourself"></td></form>
-    </tr>
+    <c:forEach items="${values}" var="value">
+        <tr>
+            <td><c:out value="${value.timestamp.toLocaleString()} "></c:out></td>
+            <td><c:out value="${value.value} "></c:out></td>
+            <td><c:out value="${value.variableId} "></c:out></td>
+            <td><c:out value="${value.unit} "></c:out></td>
+            <form action="/hello"><td><input type="submit" value="See yourself"></td></form>
+        </tr>
 
-</c:forEach>
+    </c:forEach>
 </table>
 
 </body>

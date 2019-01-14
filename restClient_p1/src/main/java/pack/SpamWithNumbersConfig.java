@@ -1,19 +1,23 @@
 package pack;
 
 
-import model.AuthorizationToken;
-import model.UserModelLogin;
+import javafx.print.PageOrientation;
+import model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Configuration
 public class SpamWithNumbersConfig
@@ -83,5 +87,21 @@ public class SpamWithNumbersConfig
         ResponseEntity<String>  result = restTemplate.exchange("http://localhost:8081/api/users/current", HttpMethod.GET, entity, String.class );
         log.info("Entity: " + result.toString());
         return result.getBody();
+    }
+
+
+    @Bean
+    public Integer variableId(RestTemplate restTemplate, HttpHeaders headers)
+    {
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+        ResponseEntity<PageSmallModel> response = restTemplate.exchange(
+                "http://localhost:8081/api/variable",
+                HttpMethod.GET,
+                entity, PageSmallModel.class );
+        VariableSmallModel model = response.getBody().getContent().get(0);
+        Integer result = model.getId();
+        log.info("Variable Id is: " +result.toString());
+
+        return result;
     }
 }

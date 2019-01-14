@@ -13,26 +13,21 @@
 <h1>To be implemented!</h1>
 <hr>
 
-<h2>${name}</h2>
-<h2>${second_name}</h2>
+<h2>${device.deviceName}</h2>
 
 
 <table>
     <tr>
         <td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
     </tr>
-<c:forEach items="${devices}" var="device">
-    <tr>
-        <td><c:out value="${device.deviceName} "></c:out></td>
-        <td><c:out value="${device.description} "></c:out></td>
-        <td><c:out value="${device.lastActivity.toLocaleString()} "></c:out></td>
-        <td><c:out value="${device.createdAtDate.toLocaleString()} "></c:out></td>
-        <td><a href="/devices/${device.id}">back home</a> </td>
-        <td><a href="/devices/${device.id}/variables">back home</a> </td>
-        <form action="/hello"><td><input type="submit" value="See yourself"></td></form>
-    </tr>
-
-</c:forEach>
+        <tr>
+            <td><c:out value="${device.deviceName} "></c:out></td>
+            <td><c:out value="${device.description} "></c:out></td>
+            <td><c:out value="${device.lastActivity} "></c:out></td>
+            <td><c:out value="${device.createdAtDate} "></c:out></td>
+            <td><a href="/devices/${device.id}/variables">back home</a> </td>
+            <form action="/hello"><td><input type="submit" value="See yourself"></td></form>
+        </tr>
 </table>
 
 </body>

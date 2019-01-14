@@ -27,6 +27,11 @@
                 <td><input type="submit" value="Create new device"></td>
             </tr>
         </form>
+        <form action="/logout">
+            <tr>
+                <td><input type="submit" value="Logout"></td>
+            </tr>
+        </form>
     </table>
 </div>
 

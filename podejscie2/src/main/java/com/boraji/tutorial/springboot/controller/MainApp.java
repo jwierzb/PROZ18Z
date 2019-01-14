@@ -25,6 +25,12 @@ public class MainApp {
         return new HttpHeaders();
     }
 
+    @Bean
+    public String getURL()
+    {
+        return "http://localhost:8081";
+    }
+
 }
 
 

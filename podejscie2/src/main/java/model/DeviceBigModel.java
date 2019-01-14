@@ -1,11 +1,13 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -13,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class DeviceBigModel {
 
     @JsonProperty("id")
-    private int id;
+    private Integer id;
     @JsonProperty("deviceName")
     private String deviceName;
     @JsonProperty("enabled")
@@ -23,9 +25,9 @@ public class DeviceBigModel {
     @JsonProperty("description")
     private String description;
     @JsonProperty("createdAtDate")
-    private String createdAtDate;
+    private Date createdAtDate;
     @JsonProperty("lastActivity")
-    private String lastActivity;
+    private Date lastActivity;
 
 
 

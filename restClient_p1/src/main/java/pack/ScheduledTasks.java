@@ -7,9 +7,13 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 public class ScheduledTasks {
 
@@ -20,6 +24,12 @@ public class ScheduledTasks {
     @Autowired
     HttpHeaders headers;
 
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    Integer variableId;
+
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
         log.info("The time is now {}", dateFormat.format(new Date()));
@@ -29,9 +39,13 @@ public class ScheduledTasks {
     public void pushRandomNumber()
     {
         Random random = new Random();
-        int n = random.nextInt( 7 );
+        Integer n = random.nextInt(9);
         log.info("Random number for this second is " + n );
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+        ResponseEntity<String> result = restTemplate.exchange("http://localhost:8081/api/variable/" + variableId.toString() + "?value="+ n.toString(),
+                HttpMethod.POST,
+                entity,
+                String.class );
+        log.info("Entity: " + result.getBody().toString());
     }
 }

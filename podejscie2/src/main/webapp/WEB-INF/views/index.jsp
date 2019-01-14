@@ -12,7 +12,7 @@
     <title>MAIN MENU</title>
 </head>
 <body>
-<h1>Welcome screen</h1>
+<h1>${message}</h1>
 <hr>
 
 
