@@ -6,20 +6,18 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="refresh" content="5" />
     <link rel="stylesheet" href="/resources/css/style.css">
-    <title>Spring Boot</title>
+    <title>History of variable</title>
 </head>
 <body>
-<h1>To be implemented!</h1>
+<h1>History of variable</h1>
 <hr>
 
-<h2>${name}</h2>
-<h2>${second_name}</h2>
 
-
-<table>
+<table class="demo-wrapper">
     <tr>
-        <td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
+        <td>Time</td><td>Value</td><td>Variable Id</td>
     </tr>
     <c:forEach items="${values}" var="value">
         <tr>
@@ -27,11 +25,11 @@
             <td><c:out value="${value.value} "></c:out></td>
             <td><c:out value="${value.variableId} "></c:out></td>
             <td><c:out value="${value.unit} "></c:out></td>
-            <form action="/hello"><td><input type="submit" value="See yourself"></td></form>
         </tr>
 
     </c:forEach>
 </table>
+<form action="/logout"><input type="submit" value="Logout"></form>
 
 </body>
 </html>

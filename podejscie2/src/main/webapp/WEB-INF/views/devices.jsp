@@ -7,17 +7,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <link rel="stylesheet" href="/resources/css/style.css">
-    <title>Spring Boot</title>
+    <title>Device list</title>
 </head>
 <body>
-<h1>To be implemented!</h1>
+<h1>Here are your Devices</h1>
 <hr>
 
-<h2>${name}</h2>
-<h2>${second_name}</h2>
 
-
-<table>
+<table class="demo-wrapper">
     <tr>
         <td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
     </tr>
@@ -27,13 +24,13 @@
         <td><c:out value="${device.description} "></c:out></td>
         <td><c:out value="${device.lastActivity.toLocaleString()} "></c:out></td>
         <td><c:out value="${device.createdAtDate.toLocaleString()} "></c:out></td>
-        <td><a href="/devices/${device.id}">back home</a> </td>
-        <td><a href="/devices/${device.id}/variables">back home</a> </td>
-        <form action="/hello"><td><input type="submit" value="See yourself"></td></form>
+        <td><a href="/devices/${device.id}">Device details</a> </td>
+        <td><a href="/devices/${device.id}/variables">Device variables</a> </td>
     </tr>
 
 </c:forEach>
 </table>
+<form action="/logout"><input type="submit" value="Logout"></form>
 
 </body>
 </html>

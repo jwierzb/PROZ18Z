@@ -46,7 +46,6 @@ public class SpamWithNumbersConfig
     }
 
 
-
     @Bean
     public ScheduledTasks startScheduledTasks() {
         return new ScheduledTasks();

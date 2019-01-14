@@ -8,14 +8,13 @@
     <link rel="stylesheet" href="/resources/css/style.css">
     <script type="text/javascript" src="/resources/js/app.js"></script>
 
-    <title>Login screen</title>
+    <title>Create Device</title>
 </head>
 <body>
-<h1>Create device</h1>
+<h1>Create new Device</h1>
 <hr>
 
-<div class="form">
-    <form action="devices" method="post" >
+    <form action="devices" method="post" class="demo-wrapper">
         <table>
             <tr>
                 <td>Enter device name</td>
@@ -35,11 +34,9 @@
             </tr>
             <tr>
                 <td><input type="submit" value="Submit"></td>
-                <td><button>some funny button</button></td>
             </tr>
         </table>
     </form>
-</div>
 
 </body>
 </html>

@@ -14,9 +14,8 @@
 <h1>Login screen</h1>
 <hr>
 
-<div class="form">
     <form action="login" method="post" >
-        <table>
+        <table class="demo-wrapper">
             <tr>
                 <td>Enter Your name</td>
                 <td><input id="name" name="name"></td>
@@ -27,11 +26,9 @@
             </tr>
             <tr>
                 <td><input type="submit" value="Submit"></td>
-                <td><button>some funny button</button></td>
             </tr>
         </table>
     </form>
-</div>
 
 </body>
 </html>

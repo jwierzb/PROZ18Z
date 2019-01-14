@@ -10,14 +10,11 @@
     <title>Spring Boot</title>
 </head>
 <body>
-<h1>To be implemented!</h1>
+<h1>List of variables</h1>
 <hr>
 
-<h2>${name}</h2>
-<h2>${second_name}</h2>
 
-
-<table>
+<table class="demo-wrapper">
     <tr>
         <td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
     </tr>
@@ -31,6 +28,7 @@
 
     </c:forEach>
 </table>
+<form action="/logout"><input type="submit" value="Logout"></form>
 
 </body>
 </html>

@@ -7,16 +7,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <link rel="stylesheet" href="/resources/css/style.css">
-    <title>Spring Boot</title>
+    <title>Device</title>
 </head>
 <body>
-<h1>To be implemented!</h1>
+<h1>Device</h1>
 <hr>
 
-<h2>${device.deviceName}</h2>
+<h2>More details about ${device.deviceName}</h2>
 
 
-<table>
+<table class="demo-wrapper">
     <tr>
         <td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
     </tr>
@@ -25,10 +25,10 @@
             <td><c:out value="${device.description} "></c:out></td>
             <td><c:out value="${device.lastActivity} "></c:out></td>
             <td><c:out value="${device.createdAtDate} "></c:out></td>
-            <td><a href="/devices/${device.id}/variables">back home</a> </td>
-            <form action="/hello"><td><input type="submit" value="See yourself"></td></form>
+            <td><a href="/devices/${device.id}/variables">See variables</a> </td>
         </tr>
 </table>
 
+<form action="/logout"><input type="submit" value="Logout"></form>
 </body>
 </html>

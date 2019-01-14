@@ -8,15 +8,14 @@
     <link rel="stylesheet" href="/resources/css/style.css">
     <script type="text/javascript" src="/resources/js/app.js"></script>
 
-    <title>Login screen</title>
+    <title>Register screen</title>
 </head>
 <body>
-<h1>Login screen</h1>
+<h1>Register new user</h1>
 <hr>
 
-<div class="form">
     <form action="register" method="post" >
-        <table>
+        <table class="demo-wrapper">
             <tr>
                 <td>Enter Your name</td>
                 <td><input id="name" name="name"></td>
@@ -31,11 +30,9 @@
             </tr>
             <tr>
                 <td><input type="submit" value="Submit"></td>
-                <td><button>some funny button</button></td>
             </tr>
         </table>
     </form>
-</div>
 
 </body>
 </html>

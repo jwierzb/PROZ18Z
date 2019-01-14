@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ApiClientService
 {
@@ -90,12 +89,10 @@ public class ApiClientService
     public List<ValueModel> getVariableValues(final Integer id)
     {
         HttpEntity<String> entity = new HttpEntity<>("parameters", authorizationHeaders);
-        log.info("Get history attempt");
         ResponseEntity<PageSmallModel> response = restTemplate.exchange(
                 mainURL +"/api/variable/" + id.toString() + "/values",
                 HttpMethod.GET,
                 entity, PageSmallModel.class );
-        log.info("Get history successfull" + response.toString());
         return response.getBody().getContent();
     }
 

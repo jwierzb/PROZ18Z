@@ -6,17 +6,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
     <!-- Static content -->
-    <link rel="stylesheet" href="/resources/static/css/style.css">
+    <link rel="stylesheet" href="/resources/css/style.css">
     <script type="text/javascript" src="/resources/js/app.js"></script>
 
-    <title>MAIN MENU</title>
+    <title>Successfully logged in</title>
 </head>
 <body>
 <h1>Hello ${name}!</h1>
 <hr>
 
-<div class="form">
-    <table>
+    <table class="demo-wrapper">
         <form action="devices" method="get">
             <tr>
                 <td><input type="submit" value="See your devices!"></td>
@@ -27,18 +26,14 @@
                 <td><input type="submit" value="Create new device"></td>
             </tr>
         </form>
-        <form action="/logout">
             <tr>
-                <td><input type="submit" value="Logout"></td>
+                <td>
+                    <form action="/logout"><input type="submit" value="Logout"></form>
+                </td>
             </tr>
-        </form>
+
     </table>
-</div>
 
-<c:forEach var = "i" begin = "1" end = "5">
-Item <c:out value = "${i}"/><p>
-
-    </c:forEach>
 
 </body>
 </html>

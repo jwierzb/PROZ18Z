@@ -31,11 +31,6 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping("/hello")
-    public String sayHello() {
-        return "another";
-    }
-
     @GetMapping("/register")
     public String registerScreen() {
         return "register_screen";
@@ -47,8 +42,8 @@ public class MainController {
 
         String response = apiClientService.registerUser(name, password, email);
 
-        model.addAttribute("name", response);
-        return "hello";
+        model.addAttribute("message", "User registered");
+        return "index";
     }
 
     @GetMapping("/login")

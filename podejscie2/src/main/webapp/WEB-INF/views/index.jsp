@@ -6,8 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
     <!-- Static content -->
-    <link rel="stylesheet" href="/resources/static/css/style.css">
-    <script type="text/javascript" src="/resources/js/app.js"></script>
+    <link rel="stylesheet" href="/resources/css/style.css">
 
     <title>MAIN MENU</title>
 </head>
@@ -15,8 +14,7 @@
 <h1>${message}</h1>
 <hr>
 
-
-        <table>
+        <table class="demo-wrapper">
             <form action="/register" method="get">
                 <tr>
                     <td><input type="submit" value="Register"></td>
@@ -28,16 +26,5 @@
                 </tr>
             </form>
         </table>
-
-<c:forEach var = "i" begin = "1" end = "5">
-    Item <c:out value = "${i}"/><p>
-
-</c:forEach>
-
-    <c:forTokens var = "name" items= "Ala,Ma,Kota" delims=",">
-    Item <c:out value = "${name}"/><p>
-
-    </c:forTokens>
-
 </body>
 </html>

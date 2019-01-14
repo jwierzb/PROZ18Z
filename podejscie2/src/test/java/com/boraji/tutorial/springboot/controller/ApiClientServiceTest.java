@@ -1,6 +1,7 @@
 package com.boraji.tutorial.springboot.controller;
 
 import model.DeviceBigModel;
+import model.ValueModel;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
@@ -120,6 +121,28 @@ public class ApiClientServiceTest
                 .andRespond(withSuccess("[]", MediaType.APPLICATION_JSON));
 
         service.getDeviceVariables(21);
+
+        mockRestServiceServer.verify();
+    }
+
+    @Test
+    public void TestCase7()
+    {
+        RestTemplate restTemplate = new RestTemplate();
+        MockRestServiceServer mockRestServiceServer = MockRestServiceServer.createServer(restTemplate);
+        ApiClientService service = new ApiClientService(restTemplate, new HttpHeaders(), "http://localhost:8081");
+
+        mockRestServiceServer.expect(requestTo("http://localhost:8081/api/variable/2/values"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess("{\"content\": [{ \"timestamp\": \"2019-01-14T16:47:44.51+01:00\",\"value\": 2,\"variableId\": 2,\"unit\": \"testUnit\"}]}",
+                        MediaType.APPLICATION_JSON));
+
+        List<ValueModel> result = service.getVariableValues(2);
+        ValueModel model = result.get(0);
+        Assert.assertEquals(model.getTimestamp().toString(), "Mon Jan 14 16:47:44 CET 2019");
+        Assert.assertEquals((int)model.getValue(), 2);
+        Assert.assertEquals((int)model.getVariableId(), 2);
+        Assert.assertEquals(model.getUnit(), "testUnit");
 
         mockRestServiceServer.verify();
     }

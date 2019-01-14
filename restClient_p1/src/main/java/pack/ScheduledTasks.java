@@ -31,11 +31,6 @@ public class ScheduledTasks {
     Integer variableId;
 
     @Scheduled(fixedRate = 5000)
-    public void reportCurrentTime() {
-        log.info("The time is now {}", dateFormat.format(new Date()));
-    }
-
-    @Scheduled(fixedRate = 5000)
     public void pushRandomNumber()
     {
         Random random = new Random();
