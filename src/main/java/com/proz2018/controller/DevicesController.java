@@ -11,6 +11,8 @@ import com.proz2018.resourcesassembler.DevicesResourcesAssembler;
 import com.proz2018.dao.DeviceDao;
 import com.proz2018.dao.UserDao;
 import com.proz2018.entities.Device;
+import com.proz2018.service.DeviceService;
+import com.proz2018.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,48 +34,28 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 @RequestMapping("/api/devices")
 public class DevicesController {
 
-    @Autowired
-    private DeviceDao deviceDao;
-    @Autowired
-    private DevicesResourcesAssembler assembler;
-    @Autowired
-    private UserDao userRepository;
-    @Autowired
-    private VariableDao varsRepository;
-    @Autowired
-    private EntityManager entityManager;
+    private DeviceService deviceService;
+    private UserService userService;
 
-
+    @Autowired
+    public DevicesController(DeviceService deviceService, UserService userService) {
+        this.deviceService = deviceService;
+        this.userService = userService;
+    }
 
     // Aggregate
     @GetMapping(produces = "application/json")
     public List<Resource<Device>>  all(@RequestParam(name="ordering", defaultValue = "createdAtDate") String ordering,
                                        @RequestParam(name="pagesize", defaultValue = "1000000") Integer pageSize,
                                        @RequestParam(name="page", defaultValue = "0") Integer page){
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userRepository.findByUsername(((UserDetails) principal).getUsername());
-
-
-        //TODO exception handling, wraping resource<device> pageable, sorting
-        Page<Device> devices = deviceDao.findByUser(user, new PageRequest(page, pageSize, Sort.Direction.DESC, ordering));
-        //List <Device> devices = deviceDao.findAllByUserId(user.getId());
-
-        //devices.forEach(assembler::toResource);
-        List<Resource<Device>> device = devices.stream().map(dv -> assembler.toResource(dv)).collect(Collectors.toList());
-        return  device;
+        PageRequest pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC, ordering);
+        return deviceService.getAllUserDevices(pageRequest);
     }
 
     // Single item
     @GetMapping("/{id}")
-    public Resource<Device>  one(@PathVariable Integer id)
-    {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userRepository.findByUsername(((UserDetails) principal).getUsername());
-
-        Device device = deviceDao.findByUserAndId(user, id).orElseThrow(() -> new DeviceNotFoundException(id.toString()));
-
-        return assembler.toResource(device);
+    public Resource<Device>  one(@PathVariable Integer id){
+        return deviceService.getDevice(id);
     }
 
 
@@ -82,84 +64,34 @@ public class DevicesController {
     @PostMapping
     public Resource<Device>  newDevice(@RequestBody DeviceModel deviceModel) throws URISyntaxException
     {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userRepository.findByUsername(((UserDetails) principal).getUsername());
-
-        Device device = new Device(deviceModel.getName(),deviceModel.isEnabled(),deviceModel.getDescription(),deviceModel.getTags());
-        device.setUser(user);
-        return assembler.toResource(deviceDao.saveAndFlush(device));
+        return deviceService.newDevice(deviceModel);
     }
 
     //Modify device
     @PutMapping("/{id}")
     public Resource<Device> modifyDevice(@PathVariable Integer id,
-                                         @RequestBody DeviceModel deviceModel)
-    {
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userRepository.findByUsername(((UserDetails) principal).getUsername());
-
-        Device device = deviceDao.findByUserAndId(user, id).orElseThrow(() -> new DeviceNotFoundException(id.toString()));
-
-
-        if(!deviceModel.getName().isEmpty()) device.setDeviceName(deviceModel.getName());
-        if(!deviceModel.getDescription().isEmpty()) device.setDescription(deviceModel.getDescription());
-        if(!deviceModel.getTags().isEmpty()) device.setTags(deviceModel.getTags());
-        device.setEnabled(deviceModel.isEnabled());
-
-        return assembler.toResource(deviceDao.save(device));
+                                         @RequestBody DeviceModel deviceModel) {
+        return deviceService.modifyDevice(id, deviceModel);
     }
 
 
     @DeleteMapping("/{id}")
-    public void deleteDevice(@PathVariable Integer id)
-    {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userRepository.findByUsername(((UserDetails) principal).getUsername());
-
-        //find device
-        Device device = deviceDao.findByUserAndId(user, id).orElseThrow(() -> new DeviceNotFoundException(id.toString()));
-
-        deviceDao.delete(device);
-
-
+    public void deleteDevice(@PathVariable Integer id) {
+        deviceService.deleteDevice(id);
     }
 
     @PostMapping("/{id}/new-variable")
     @ResponseStatus(HttpStatus.CREATED)
     public Variable newVariable(@PathVariable Integer id, @RequestBody VariableModel variableModel){
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userRepository.findByUsername(((UserDetails) principal).getUsername());
-
-
-        //find device
-        Device device = deviceDao.findByUserAndId(user, id).orElseThrow(() -> new DeviceNotFoundException(id.toString()));
-
-        Variable var = new Variable();
-        var = var.builder()
-                .description(variableModel.getDescription())
-                .name(variableModel.getName())
-                .tags(variableModel.getTags())
-                .unit(variableModel.getUnit())
-                .lastValue(null)
-                .device(device)
-                .user(user)
-                .build();
-        device.setVariablesCount(device.getVariablesCount()+1);
-        deviceDao.save(device);
-        return varsRepository.save(var);
+        return deviceService.newDeviceVariable(id, variableModel);
     }
 
     @GetMapping("/{id}/variables")
     @ResponseStatus(HttpStatus.OK)
     public List<Variable> deviceVariables(@PathVariable Integer id)
     {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userRepository.findByUsername(((UserDetails) principal).getUsername());
-        //find device
-        Device device = deviceDao.findByUserAndId(user, id).orElseThrow(() -> new DeviceNotFoundException(id.toString()));
-        return varsRepository.findAllByUserAndDevice(user, device);
+        return deviceVariables(id);
     }
+
     DevicesController(){}
 }

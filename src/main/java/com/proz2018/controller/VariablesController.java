@@ -10,6 +10,7 @@ import com.proz2018.entities.UserEntity;
 import com.proz2018.entities.Value;
 import com.proz2018.entities.Variable;
 import com.proz2018.model.VariableModel;
+import com.proz2018.service.VariablesService;
 import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,89 +33,38 @@ import java.util.List;
 public class VariablesController {
 
     @Autowired
-    UserDao userDao;
-    @Autowired
-    VariableDao variableDao;
-    @Autowired
-    ValueDao valueDao;
-    @Autowired
-    DeviceDao deviceDao;
+    VariablesService variablesService;
 
     @GetMapping
     Page<Variable> allVariables(@RequestParam(name="ordering", defaultValue = "id") String ordering,
                                 @RequestParam(name="pagesize", defaultValue = "20") Integer pageSize,
                                 @RequestParam(name="page", defaultValue = "0") Integer page){
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userDao.findByUsername(((UserDetails) principal).getUsername());
-
-        return variableDao.findAllByUser(user, new PageRequest(page, pageSize, Sort.Direction.DESC, ordering));
+        PageRequest pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC, ordering);
+        return variablesService.getUserVariables(pageRequest);
     }
 
     @GetMapping("/{id}")
     Variable one(@PathVariable Integer id){
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userDao.findByUsername(((UserDetails) principal).getUsername());
-
-        return variableDao.findById(id).orElseThrow(() -> new EntityNotFoundException());
+        return variablesService.getUserVariables(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Variable newVariable(@PathVariable Integer id, @RequestBody VariableModel variableModel){
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userDao.findByUsername(((UserDetails) principal).getUsername());
-
-        Variable variable = variableDao.findByIdAndUser(id, user).orElseThrow(() -> new EntityNotFoundException());
-
-        if(variableModel.getDescription().isEmpty()) variableModel.setDescription(variable.getDescription());
-        if(variableModel.getName().isEmpty()) variableModel.setName(variable.getName());
-        if(variableModel.getTags().isEmpty()) variableModel.setTags(variable.getTags());
-        if(variableModel.getUnit().isEmpty()) variableModel.setUnit(variable.getUnit());
-
-        variable.setDescription(variableModel.getDescription());
-        variable.setTags(variableModel.getTags());
-        variable.setUnit(variableModel.getUnit());
-        variable.setName(variableModel.getName());
-
-
-        return variableDao.save(variable);
+        return variablesService.modifyVariable(id, variableModel);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteVariable(@PathVariable Integer id){
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userDao.findByUsername(((UserDetails) principal).getUsername());
-
-        Variable variable = variableDao.findByIdAndUser(id, user).orElseThrow(() -> new EntityNotFoundException());
-        Device device = variable.getDevice();
-        device.setVariablesCount(device.getVariablesCount()-1);
-
-        deviceDao.save(device);
-
-        variableDao.delete(variable);
-
+        variablesService.deleteVariable(id);
     }
-
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Value createValue(@PathVariable Integer id, @RequestParam(name = "value") Double value){
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userDao.findByUsername(((UserDetails) principal).getUsername());
-
-        Variable variable = variableDao.findByIdAndUser(id, user).orElseThrow(() -> new EntityNotFoundException());
-        Value val = new Value();
-        val.setValue(value);
-        val.setVariable(variable);
-        variable.setLastValue(value);
-        variableDao.save(variable);
-        return valueDao.save(val);
+        return variablesService.createValue(id, value);
     }
 
     @GetMapping("/{id}/values")
@@ -124,12 +74,8 @@ public class VariablesController {
                                     @RequestParam(name="pagesize", defaultValue = "20") Integer pageSize,
                                     @RequestParam(name="page", defaultValue = "0") Integer page){
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userDao.findByUsername(((UserDetails) principal).getUsername());
-
-        Variable variable = variableDao.findByIdAndUser(id, user).orElseThrow(() -> new EntityNotFoundException());
-
-        return valueDao.findAllByVariable(variable, new PageRequest(page, pageSize, Sort.Direction.DESC, ordering));
+        PageRequest pageRequest = new PageRequest(page, pageSize, Sort.Direction.DESC, ordering);
+        return variablesService.getAllValues(id, pageRequest);
     }
 
     @DeleteMapping("/{id}/values")
@@ -138,16 +84,9 @@ public class VariablesController {
                                 @RequestParam(name="start") String start,
                                 @RequestParam(name="end") String end){
 
+        Timestamp startTime = Timestamp.valueOf(LocalDateTime.parse(start));
+        Timestamp endTime = Timestamp.valueOf(LocalDateTime.parse(end));
 
-            Timestamp startTime = Timestamp.valueOf(LocalDateTime.parse(start));
-            Timestamp endTime = Timestamp.valueOf(LocalDateTime.parse(end));
-
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userDao.findByUsername(((UserDetails) principal).getUsername());
-
-        Variable variable = variableDao.findByIdAndUser(id, user).orElseThrow(() -> new EntityNotFoundException());
-
-        valueDao.deleteAllByTimestampBetweenAndVariable(startTime, endTime, variable);
+        variablesService.deleteAllValues(id, startTime, endTime);
     }
 }
