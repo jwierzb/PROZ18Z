@@ -14,7 +14,6 @@
 <body>
 <h1>Hello ${name}!</h1>
 <hr>
-
     <table class="demo-wrapper">
         <form action="devices" method="get">
             <tr>
@@ -33,7 +32,6 @@
             </tr>
 
     </table>
-
 
 </body>
 </html>

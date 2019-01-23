@@ -14,10 +14,10 @@
 <h1>History of variable</h1>
 <hr>
 
-
-<table class="demo-wrapper">
+<div class="demo-wrapper">
+<table class="content">
     <tr>
-        <td>Time</td><td>Value</td><td>Variable Id</td>
+        <td>Time</td><td>Value</td><td>Variable Id</td><td>Unit</td>
     </tr>
     <c:forEach items="${values}" var="value">
         <tr>
@@ -29,7 +29,8 @@
 
     </c:forEach>
 </table>
-<form action="/logout"><input type="submit" value="Logout"></form>
+</div>
+<form  class="bottom" action="/logout"><input type="submit" value="Logout"></form>
 
 </body>
 </html>

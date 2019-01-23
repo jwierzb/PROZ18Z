@@ -15,12 +15,13 @@
 
 <h2>More details about ${device.deviceName}</h2>
 
-
-<table class="demo-wrapper">
+<div class="demo-wrapper">
+<table class="content">
     <tr>
-        <td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
+        <td>ID</td><td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
     </tr>
         <tr>
+            <td><c:out value="${device.id} "></c:out></td>
             <td><c:out value="${device.deviceName} "></c:out></td>
             <td><c:out value="${device.description} "></c:out></td>
             <td><c:out value="${device.lastActivity} "></c:out></td>
@@ -28,7 +29,8 @@
             <td><a href="/devices/${device.id}/variables">See variables</a> </td>
         </tr>
 </table>
+</div>
 
-<form action="/logout"><input type="submit" value="Logout"></form>
+<form class="bottom" action="/logout"><input type="submit" value="Logout"></form>
 </body>
 </html>

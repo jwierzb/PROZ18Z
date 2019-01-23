@@ -13,14 +13,15 @@
 <h1>List of variables</h1>
 <hr>
 
-
-<table class="demo-wrapper">
+<div class="demo-wrapper">
+<table class="content">
     <tr>
-        <td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
+        <td>ID</td><td>Name</td><td>description</td><td>Last activity</td><td>Created</td>
     </tr>
     <c:forEach items="${variables}" var="variable">
         <tr>
             <td><c:out value="${variable.id} "></c:out></td>
+            <td><c:out value="${variable.name} "></c:out></td>
             <td><c:out value="${variable.description} "></c:out></td>
             <td><c:out value="${variable.tags} "></c:out></td>
             <form action="/variables/${variable.id}"><td><input type="submit" value="History"></td></form>
@@ -28,7 +29,8 @@
 
     </c:forEach>
 </table>
-<form action="/logout"><input type="submit" value="Logout"></form>
+</div>
+<form class="bottom" action="/logout"><input type="submit" value="Logout"></form>
 
 </body>
 </html>

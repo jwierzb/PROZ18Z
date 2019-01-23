@@ -30,6 +30,9 @@ public class ScheduledTasks {
     @Autowired
     Integer variableId;
 
+    @Autowired
+    String mainURL;
+
     @Scheduled(fixedRate = 5000)
     public void pushRandomNumber()
     {
@@ -37,7 +40,7 @@ public class ScheduledTasks {
         Integer n = random.nextInt(9);
         log.info("Random number for this second is " + n );
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-        ResponseEntity<String> result = restTemplate.exchange("http://localhost:8081/api/variable/" + variableId.toString() + "?value="+ n.toString(),
+        ResponseEntity<String> result = restTemplate.exchange(mainURL + "/api/variable/" + variableId.toString() + "?value="+ n.toString(),
                 HttpMethod.POST,
                 entity,
                 String.class );

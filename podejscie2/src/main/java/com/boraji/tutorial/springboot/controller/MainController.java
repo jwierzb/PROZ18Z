@@ -94,7 +94,7 @@ public class MainController {
                                Model model)
     {
         String response = apiClientService.createDevice(name, enabled, tags, description);
-        model.addAttribute("name", response );
+        model.addAttribute("name", "Device created" );
         return "logged_home";
     }
 

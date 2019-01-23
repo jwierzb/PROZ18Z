@@ -24,6 +24,12 @@ public class SpamWithNumbersConfig
 {
     private static final Logger log = LoggerFactory.getLogger(Application.class);
 
+    @Bean
+    public String getUrl()
+    {
+        return "http://localhost:8081";
+    }
+
     @Bean RestTemplateBuilder builder()
     {
         return new RestTemplateBuilder();
@@ -35,15 +41,6 @@ public class SpamWithNumbersConfig
         return builder.build();
     }
 
-    @Bean
-    public CommandLineRunner run(RestTemplate restTemplate) throws Exception
-    {
-        return args -> {
-            Quote quote = restTemplate.getForObject(
-                    "http://gturnquist-quoters.cfapps.io/api/random", Quote.class);
-            log.info(quote.toString());
-        };
-    }
 
 
     @Bean
@@ -52,7 +49,7 @@ public class SpamWithNumbersConfig
     }
 
     @Bean
-    public AuthorizationToken login(RestTemplate restTemplate) throws Exception
+    public AuthorizationToken login(RestTemplate restTemplate, String url) throws Exception
     {
         log.info("My bean!");
         UserModelLogin request = new UserModelLogin();
@@ -61,7 +58,7 @@ public class SpamWithNumbersConfig
         log.info(request.toString());
         //http://localhost:8081/api/users/login?username=q&password=w
         AuthorizationToken  token = restTemplate.postForObject(
-                "http://localhost:8081/api/users/login",
+                url + "/api/users/login",
                 request,
                 AuthorizationToken.class );
         log.info(token.toString());
@@ -79,22 +76,13 @@ public class SpamWithNumbersConfig
         return result;
     }
 
-    @Bean
-    public String attempt(HttpHeaders headers, RestTemplate restTemplate)
-    {
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-        ResponseEntity<String>  result = restTemplate.exchange("http://localhost:8081/api/users/current", HttpMethod.GET, entity, String.class );
-        log.info("Entity: " + result.toString());
-        return result.getBody();
-    }
-
 
     @Bean
-    public Integer variableId(RestTemplate restTemplate, HttpHeaders headers)
+    public Integer variableId(RestTemplate restTemplate, HttpHeaders headers, String url)
     {
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
         ResponseEntity<PageSmallModel> response = restTemplate.exchange(
-                "http://localhost:8081/api/variable",
+                url + "/api/variable",
                 HttpMethod.GET,
                 entity, PageSmallModel.class );
         VariableSmallModel model = response.getBody().getContent().get(0);
